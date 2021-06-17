@@ -1,0 +1,46 @@
+# Docker
+# Build a Docker image
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- master
+
+resources:
+- repo: self
+
+variables:
+  tag: '$(Build.BuildId)'
+
+stages:
+- stage: Build
+  displayName: Build image
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Docker@2
+      displayName: Build result
+      inputs:
+        command: build
+        dockerfile: '$(Build.SourcesDirectory)/result/Dockerfile'
+        buildContext: '$(Build.SourcesDirectory)/result'
+        tags: |
+          $(tag)
+    - task: Docker@2
+      displayName: Build vote
+      inputs:
+        command: build
+        dockerfile: '$(Build.SourcesDirectory)/vote/Dockerfile'
+        buildContext: '$(Build.SourcesDirectory)/vote'
+        tags: |
+          $(tag)
+    - task: Docker@2
+      displayName: Build worker
+      inputs:
+        command: build
+        dockerfile: '$(Build.SourcesDirectory)/worker/Dockerfile'
+        buildContext: '$(Build.SourcesDirectory)/worker'
+        tags: |
+          $(tag)
