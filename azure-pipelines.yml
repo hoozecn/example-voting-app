@@ -25,6 +25,7 @@ stages:
       inputs:
         command: build
         dockerfile: '$(Build.SourcesDirectory)/result/Dockerfile'
+        buildContext: '$(Build.SourcesDirectory)/result'
         tags: |
           $(tag)
     - task: Docker@2
@@ -32,6 +33,7 @@ stages:
       inputs:
         command: build
         dockerfile: '$(Build.SourcesDirectory)/vote/Dockerfile'
+        buildContext: '$(Build.SourcesDirectory)/vote'
         tags: |
           $(tag)
     - task: Docker@2
@@ -39,5 +41,6 @@ stages:
       inputs:
         command: build
         dockerfile: '$(Build.SourcesDirectory)/worker/Dockerfile'
+        buildContext: '$(Build.SourcesDirectory)/worker'
         tags: |
           $(tag)
